@@ -6,19 +6,19 @@ import (
 	"time"
 )
 
-func lockIntersectionDistance(id, reserveStart, reserveEnd int, crossings []*models.Crossing ){
-	var intersectionsToLock[]*models.Intersection
-	for _, crossing := range crossings{
-		if reserveEnd >= crossing.Position && reserveStart <= crossing.Position && crossing.Intersection.LockedBy != id{
+func lockIntersectionDistance(id, reserveStart, reserveEnd int, crossings []*models.Crossing) {
+	var intersectionsToLock []*models.Intersection
+	for _, crossing := range crossings {
+		if reserveEnd >= crossing.Position && reserveStart <= crossing.Position && crossing.Intersection.LockedBy != id {
 			intersectionsToLock = append(intersectionsToLock, crossing.Intersection)
 		}
 	}
 
-	sort.Slice(intersectionsToLock, func(i,j int)bool{
+	sort.Slice(intersectionsToLock, func(i, j int) bool {
 		return intersectionsToLock[i].Id < intersectionsToLock[j].Id
 	})
 
-	for _, it := range intersectionsToLock{
+	for _, it := range intersectionsToLock {
 		it.Mutex.Lock()
 		it.LockedBy = id
 		// If the slices are not sorted a dead lock can still happen
@@ -32,7 +32,7 @@ func MoveTrain(train *models.Train, distance int, crossings []*models.Crossing) 
 		train.Front += 1
 		for _, crossing := range crossings {
 			if train.Front == crossing.Position {
-				lockIntersectionDistance(train.Id, crossing.Position, crossing.Position + train.TrainLength, crossings)
+				lockIntersectionDistance(train.Id, crossing.Position, crossing.Position+train.TrainLength, crossings)
 			}
 			back := train.Front - train.TrainLength
 			if back == crossing.Position {
