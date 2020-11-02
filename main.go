@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/CassioRoos/train_deadlock/deadlock"
+	deadlock "github.com/CassioRoos/train_deadlock/hierarchy"
 	"github.com/CassioRoos/train_deadlock/models"
 	"github.com/hajimehoshi/ebiten"
 	"log"
